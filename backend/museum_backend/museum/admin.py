@@ -7,8 +7,8 @@ class PersonPhotoInline(admin.TabularInline):
 
 @admin.register(Group)
 class GroupAdmin(admin.ModelAdmin):
-    list_display = ['name', 'description']
-    search_fields = ['name', 'description']
+    list_display = ['title', 'description']
+    search_fields = ['title', 'description']
 
 @admin.register(Person)
 class PersonAdmin(admin.ModelAdmin):

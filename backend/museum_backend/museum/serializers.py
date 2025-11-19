@@ -5,7 +5,7 @@ from .models import Person, PersonPhoto, Group
 class GroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = Group
-        fields = ['id', 'name', 'description']
+        fields = ['id', 'title', 'description']
 
 class PersonPhotoSerializer(serializers.ModelSerializer):
     photo_url = serializers.SerializerMethodField()
@@ -29,11 +29,11 @@ class PersonListSerializer(serializers.ModelSerializer):
 
 class GroupWithPersonsSerializer(serializers.ModelSerializer):
     """Сериализатор для группы с людьми"""
-    persons = PersonListSerializer(many=True, read_only=True)
+    children = PersonListSerializer(many=True, read_only=True, source='persons')
     
     class Meta:
         model = Group
-        fields = ['id', 'name', 'description', 'persons']
+        fields = ['id', 'title', 'description', 'children']
 
 class PersonDetailSerializer(serializers.ModelSerializer):
     """Сериализатор для детальной информации о человеке"""

@@ -1,7 +1,7 @@
 from django.db import models
 
 class Group(models.Model):
-    name = models.CharField(max_length=200, verbose_name='Название группы')
+    title = models.CharField(max_length=200, verbose_name='Название группы')
     description = models.TextField(verbose_name='Описание', blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -9,10 +9,10 @@ class Group(models.Model):
     class Meta:
         verbose_name = 'Группа'
         verbose_name_plural = 'Группы'
-        ordering = ['name']
+        ordering = ['title']
 
     def __str__(self):
-        return self.name
+        return self.title
 
 class Person(models.Model):
     GENDER_CHOICES = [
