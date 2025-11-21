@@ -24,21 +24,39 @@ class PersonPhotoSerializer(serializers.ModelSerializer):
 
 class PersonListSerializer(serializers.ModelSerializer):
     """Сериализатор для списка людей (только основные данные)"""
-    groups = GroupSerializer(many=True, read_only=True)
-    key = serializers.IntegerField(source='id', read_only=True)
+    # groups = GroupSerializer(many=True, read_only=True)
+    key = serializers.SerializerMethodField()
+    title = serializers.SerializerMethodField()
     
     class Meta:
         model = Person
-        fields = ['id', 'key', 'first_name', 'middle_name', 'last_name', 'rank', 'gender', 'groups']
+        fields = ['id', 'key', 'title']
+
+    def get_title(self, obj):
+        return f"{obj.rank}{' ' if obj.rank else ''}{obj.first_name} {obj.middle_name} {obj.last_name}"
+
+    def get_key(self, obj):
+        group_id = self.context.get('group_id')
+        if group_id is None:
+            return obj.id
+        return f"{group_id}-{obj.id}"
 
 class GroupWithPersonsSerializer(serializers.ModelSerializer):
     """Сериализатор для группы с людьми"""
-    children = PersonListSerializer(many=True, read_only=True, source='persons')
+    children = serializers.SerializerMethodField()
     key = serializers.IntegerField(source='id', read_only=True)
     
     class Meta:
         model = Group
         fields = ['id', 'key', 'title', 'description', 'children']
+
+    def get_children(self, obj):
+        serializer = PersonListSerializer(
+            obj.persons.all(),
+            many=True,
+            context={**self.context, 'group_id': obj.id}
+        )
+        return serializer.data
 
 class PersonDetailSerializer(serializers.ModelSerializer):
     """Сериализатор для детальной информации о человеке"""
