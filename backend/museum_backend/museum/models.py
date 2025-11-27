@@ -21,7 +21,7 @@ class Person(models.Model):
     ]
     rank = models.CharField(max_length=100, verbose_name='Сан')
     first_name = models.CharField(max_length=100, verbose_name='Имя')
-    middle_name = models.CharField(max_length=100, verbose_name='Отчество')
+    middle_name = models.CharField(max_length=100, verbose_name='Отчество', null=True, blank=True)
     last_name = models.CharField(max_length=100, verbose_name='Фамилия')
     birth_year = models.IntegerField(verbose_name='Дата рождения')
     death_year = models.IntegerField(verbose_name='Дата смерти', null=True, blank=True)

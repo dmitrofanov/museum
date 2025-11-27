@@ -33,7 +33,7 @@ class PersonListSerializer(serializers.ModelSerializer):
         fields = ['id', 'key', 'title']
 
     def get_title(self, obj):
-        return f"{obj.rank}{' ' if obj.rank else ''}{obj.first_name} {obj.middle_name} {obj.last_name}"
+        return f"{obj.rank} {obj.first_name}{' ' + obj.middle_name if obj.middle_name else ''} {obj.last_name}"
 
     def get_key(self, obj):
         group_id = self.context.get('group_id')
